@@ -13,18 +13,16 @@ The page is intended to provide support for the use of eLabFTWs API feature. You
 ## Setup <a name="setup"></a>
 Since it is an HTTP REST API, the tool used only needs to understand HTTP. In this setup we use python as the tool. For this purpose, a library has already been set up with the name elabapy, which we simply install with pip. To do this, we work in the shell and use, for example: the Anaconda Prompt Shell and enter the following in the console:<br>
 
-```
-
+```bash
 # create a virtual environment
 python -m venv elab
 # activate it
-# on Linux
+# on GNU/Linux
 source elab/bin/activate
 # on Windows
-# C:\> elab\Scripts\activate.bat     
+# C:\> elab\Scripts\activate.bat
 # install the library
 pip install elabapi-python
-
 ```
 
 In the next step we need our personal API key:
@@ -36,8 +34,7 @@ Now we need the python files with the corresponding instructions to trigger cert
 
 In order to be able to use various functions of the API interface, we create a configuration file which we use as the basis for all other files. Here you only need to replace the value 'API_KEY' at the position " API_KEY = 'API_KEY' " with the generated KEY in the User Panel and save the file. It is important for all other files that all scripts are in the same folder. The file is available here: ([eLabFTW_config_api2.py](https://github.com/sharedRDM/elabftw_api_support/blob/main/eLabFTW_config_api2.py))
 
-```
-
+```python
 import os
 import time
 import datetime
@@ -66,14 +63,13 @@ class Helper_elabftw:
         self.api_client = elabapi_python.ApiClient(self.configuration)
         # fix issue with Authorization header not being properly set by the generated lib
         self.api_client.set_default_header(header_name='Authorization', header_value=API_KEY)
-
 ```
+
 ## Upload files to experiments <a name="upload_files"></a>
 
 We will deal with two cases here. In the first case, we have already created an experiment in eLabFTW and we now want to attach different files to this entry. If you want to upload the content of an entire folder, this is also included in the example. The following short script ([eLabFTW_existing__entries.py](https://github.com/sharedRDM/elabftw_api_support/blob/main/eLabFTW_existing__entries.py)) is sufficient for this:
 
-```
-
+```python
 import os
 import elabapi_python
 from eLabFTW_config_api2 import Helper_elabftw
@@ -95,13 +91,11 @@ for filename in os.listdir(local_folder_path):
     local_file_path = os.path.join(local_folder_path, filename)
     if os.path.isfile(local_file_path):
         uploadsApi.post_upload('experiments', 399, file=local_file_path, comment='Uploaded with APIv2')
-
 ```
 
 In the second case, we want to create a new experiment with the possibility to attach files directly to this experiment. If you want to upload the content of an entire folder, this is also included in the example. The following short script ([eLabFTW_new_entries.py](https://github.com/sharedRDM/elabftw_api_support/blob/main/eLabFTW_new_entries.py)) includes this:
 
-```
-
+```python
 import os
 import elabapi_python
 from eLabFTW_config_api2 import Helper_elabftw
@@ -132,14 +126,12 @@ for filename in os.listdir(local_folder_path):
     local_file_path = os.path.join(local_folder_path, filename)
     if os.path.isfile(local_file_path):
         uploadsApi.post_upload('experiments', id, file=local_file_path, comment='Uploaded with APIv2')
-
 ```
 ## Replace files in an experiment <a name="replace_files"></a>
 
 You can also [replace existing files](https://github.com/sharedRDM/elabftw_api_support/blob/main/eLabFTW_replace_upload.py) that you have attached to an entry with another file. This can be interesting if you have a metadata file that is to be replaced automatically, or a small measurement log that is to be expanded regularly. The replaced files are still available in the archive.
 
-```
-
+```python
 import os
 import elabapi_python
 from eLabFTW_config_api2 import Helper_elabftw
@@ -167,7 +159,6 @@ print(upload_id)
 
 # Replace existing upload with a new one
 uploadsApi.post_upload_replace('experiments', 2359, upload_id, file=local_file_path)
-
 ```
 
 ## Additional functions
